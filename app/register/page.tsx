@@ -5,6 +5,7 @@
 
 import { useState } from 'react'
 import { supabase } from '@/lib/supabaseClient'
+import { useRouter } from 'next/navigation'
 
 export default function RegisterPage() {
   // 入力用の状態管理
@@ -12,6 +13,7 @@ export default function RegisterPage() {
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(false)
+  const router = useRouter()
 
   // サインアップ/サインイン処理
   const handleAuth = async (type: 'signUp' | 'signIn') => {
@@ -31,6 +33,7 @@ export default function RegisterPage() {
         setMessage('サインイン失敗: ' + result.error.message)
       } else {
         setMessage('サインイン成功！')
+        router.push('/pricing')
       }
     }
     setLoading(false)

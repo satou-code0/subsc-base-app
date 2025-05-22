@@ -26,13 +26,13 @@
 - [x] `/api/webhook.ts`：Stripe Webhook受信・DB反映
 
 ## 6. Vercelへのデプロイ
-- [ ] GitHubリポジトリにpush
-- [ ] Vercelで新規プロジェクト作成
-- [ ] 環境変数をVercel側にも登録
-- [ ] デプロイ
+- [x] GitHubリポジトリにpush
+- [x] Vercelで新規プロジェクト作成
+- [x] 環境変数をVercel側にも登録
+- [x] デプロイ
 
 ## 7. Stripe Webhookの本番URL設定
-- [ ] StripeのWebhook送信先をVercelの本番URLに変更
+- [x] StripeのWebhook送信先をVercelの本番URLに変更
 
 ## 8. 動作確認
 - [ ] 新規ユーザー登録→プラン選択→決済→会員エリアアクセスまで一連の流れをテスト
