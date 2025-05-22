@@ -3,11 +3,12 @@
 
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { supabase } from '@/lib/supabaseClient'
 
-export default function DashboardPage() {
+// DashboardContent：useSearchParamsを使用する部分をサブコンポーネント化
+function DashboardContent() {
   const [user, setUser] = useState<any>(null)
   const [subscription, setSubscription] = useState<any>(null)
   const [loading, setLoading] = useState(true)
@@ -93,5 +94,14 @@ export default function DashboardPage() {
       <p>あなたのサブスクリプションは <b>{subscription.status}</b> です。</p>
       {/* ここに会員限定コンテンツや機能を追加 */}
     </div>
+  )
+}
+
+// メインのDashboardPageコンポーネント
+export default function DashboardPage() {
+  return (
+    <Suspense fallback={<div>読み込み中...</div>}>
+      <DashboardContent />
+    </Suspense>
   )
 } 
