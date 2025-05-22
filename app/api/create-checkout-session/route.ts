@@ -72,7 +72,7 @@ export async function POST(req: NextRequest) {
           },
         ],
         mode: 'subscription',
-        success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/dashboard?success=1`,
+        success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/dashboard?success=1&user_id=${authUserId}`,
         cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/pricing?canceled=1`,
         // 重要: ユーザーIDをメタデータとして保存（WebhookでDBを更新する際に必要）
         metadata: {
