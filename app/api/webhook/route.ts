@@ -1,7 +1,7 @@
-// /api/webhook.ts：Stripe Webhook受信・DB反映エンドポイント
+// /api/webhook/route.ts：Stripe Webhook受信・DB反映エンドポイント（App Router対応）
 // Stripeからのイベントを受信し、Supabaseのsubscriptionsテーブルを更新します
 
-import { NextApiRequest, NextApiResponse } from 'next'
+import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import Stripe from 'stripe'
 
@@ -11,29 +11,17 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 )
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-  apiVersion: '2023-10-16',
-})
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
 
-export const config = {
-  api: {
-    bodyParser: false, // Stripe署名検証のため生データで受け取る
-  },
-}
-
-import { buffer } from 'micro'
-
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'POST') {
-    return res.status(405).end('Method Not Allowed')
-  }
-  const buf = await buffer(req)
-  const sig = req.headers['stripe-signature'] as string
+export async function POST(req: NextRequest) {
+  // Stripe署名検証のため生データを取得
+  const buf = Buffer.from(await req.arrayBuffer())
+  const sig = req.headers.get('stripe-signature') as string
   let event: Stripe.Event
   try {
     event = stripe.webhooks.constructEvent(buf, sig, process.env.STRIPE_WEBHOOK_SECRET as string)
   } catch (err: any) {
-    return res.status(400).send(`Webhook Error: ${err.message}`)
+    return new NextResponse(`Webhook Error: ${err.message}`, { status: 400 })
   }
 
   // イベントごとに処理を分岐
@@ -59,8 +47,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     case 'invoice.paid': {
       const invoice = event.data.object as Stripe.Invoice
       // サブスクのステータスをactiveに更新
-      await supabase.from('subscriptions').update({ status: 'active' })
-        .eq('stripe_subscription_id', invoice.subscription as string)
+      const subscriptionId = (invoice as any).subscription
+      if (subscriptionId) {
+        await supabase.from('subscriptions').update({ status: 'active' })
+          .eq('stripe_subscription_id', subscriptionId)
+      }
       break
     }
     case 'customer.subscription.deleted': {
@@ -74,11 +65,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       // 他のイベントはログのみ
       console.log(`Unhandled event type: ${event.type}`)
   }
-  res.status(200).json({ received: true })
+  return NextResponse.json({ received: true })
 }
 
 // --- 解説 ---
-// ・StripeのWebhookイベントを受信し、subscriptionsテーブルを更新します
+// ・App Router形式ではmicroは不要、req.arrayBuffer()で生データ取得
+// ・StripeのWebhookイベントを受信し、subscriptionsテーブルを更新
 // ・checkout.session.completed, invoice.paid, customer.subscription.deletedに対応
-// ・metadataでuser_idをCheckoutセッションに渡す実装が必要です
+// ・metadataでuser_idをCheckoutセッションに渡す実装が必要
 // ・.env.localにSTRIPE_WEBHOOK_SECRET, SUPABASE_SERVICE_ROLE_KEYを設定してください 
