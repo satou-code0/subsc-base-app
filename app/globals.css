@@ -2,20 +2,252 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 統一カラーシステム */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* グラデーション */
+  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --gradient-success: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  --gradient-warning: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  
+  /* シャドウ */
+  --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-medium: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-large: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  
+  /* 統一カラーパレット */
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f8fafc;
+  --color-bg-tertiary: #f1f5f9;
+  
+  --color-card-default: #ffffff;
+  --color-card-blue: #eff6ff;
+  --color-card-green: #f0fdf4;
+  --color-card-purple: #faf5ff;
+  --color-card-orange: #fff7ed;
+  --color-card-pink: #fdf2f8;
+  --color-card-indigo: #eef2ff;
+  
+  --color-text-primary: #111827;
+  --color-text-secondary: #6b7280;
+  --color-text-tertiary: #9ca3af;
+  
+  --color-border-light: #e5e7eb;
+  --color-border-medium: #d1d5db;
+  
+  --color-blue: #3b82f6;
+  --color-green: #10b981;
+  --color-purple: #8b5cf6;
+  --color-orange: #f59e0b;
+  --color-pink: #ec4899;
+  --color-indigo: #6366f1;
+  
+  /* グラスモーフィズム */
+  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.2);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* フォント設定 */
+body {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* カスタムコンポーネント */
+@layer components {
+  /* グラスモーフィズム */
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+  }
+
+  /* グラデーションボタン */
+  .btn-primary {
+    @apply px-6 py-3 rounded-xl font-medium text-white transform transition-all duration-200 hover:scale-105 active:scale-95;
+    background: var(--gradient-primary);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .btn-secondary {
+    @apply px-6 py-3 rounded-xl font-medium text-white transform transition-all duration-200 hover:scale-105 active:scale-95;
+    background: var(--gradient-secondary);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .btn-success {
+    @apply px-6 py-3 rounded-xl font-medium text-white transform transition-all duration-200 hover:scale-105 active:scale-95;
+    background: var(--gradient-success);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .btn-warning {
+    @apply px-6 py-3 rounded-xl font-medium text-white transform transition-all duration-200 hover:scale-105 active:scale-95;
+    background: var(--gradient-warning);
+    box-shadow: var(--shadow-soft);
+  }
+
+  /* カード */
+  .card {
+    @apply rounded-2xl border-0 transition-all duration-300 hover:scale-[1.02];
+    background: var(--color-card-default);
+    color: var(--color-text-primary);
+    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--color-border-light);
+  }
+
+  .card-pro {
+    @apply relative overflow-hidden text-white;
+    background: var(--gradient-primary);
+    box-shadow: var(--shadow-medium);
+  }
+
+  .card-cancel {
+    @apply relative overflow-hidden text-white;
+    background: var(--gradient-warning);
+    box-shadow: var(--shadow-medium);
+  }
+
+  /* 統計カード（色分けされた背景） */
+  .stats-card {
+    @apply p-6 rounded-xl border-0 text-center transition-all duration-300 hover:scale-[1.02];
+    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--color-border-light);
+  }
+
+  .stats-card-blue {
+    background: var(--color-card-blue);
+    color: var(--color-text-primary);
+  }
+
+  .stats-card-green {
+    background: var(--color-card-green);
+    color: var(--color-text-primary);
+  }
+
+  .stats-card-purple {
+    background: var(--color-card-purple);
+    color: var(--color-text-primary);
+  }
+
+  .stats-card-orange {
+    background: var(--color-card-orange);
+    color: var(--color-text-primary);
+  }
+
+  .stats-card-indigo {
+    background: var(--color-card-indigo);
+    color: var(--color-text-primary);
+  }
+
+  .stats-icon-blue {
+    @apply w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3;
+    background: rgba(59, 130, 246, 0.1);
+  }
+
+  .stats-icon-green {
+    @apply w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3;
+    background: rgba(16, 185, 129, 0.1);
+  }
+
+  .stats-icon-purple {
+    @apply w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3;
+    background: rgba(139, 92, 246, 0.1);
+  }
+
+  .stats-icon-orange {
+    @apply w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3;
+    background: rgba(245, 158, 11, 0.1);
+  }
+
+  .stats-icon-indigo {
+    @apply w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3;
+    background: rgba(99, 102, 241, 0.1);
+  }
+
+  .stats-number {
+    @apply text-2xl font-bold mb-1;
+    color: var(--color-text-primary);
+  }
+
+  .stats-label {
+    @apply text-sm;
+    color: var(--color-text-secondary);
+  }
+
+  /* 入力フィールド */
+  .input-modern {
+    @apply w-full px-4 py-3 rounded-xl focus:ring-4 focus:ring-blue-100 transition-all duration-200 outline-none;
+    background: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border-light);
+  }
+
+  .input-modern:focus {
+    border-color: var(--color-blue);
+  }
+
+  /* ヘッダーグラデーション */
+  .header-gradient {
+    background: var(--color-bg-primary);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--color-border-light);
+    box-shadow: var(--shadow-soft);
+  }
+
+  /* アニメーション */
+  .slide-in {
+    animation: slideIn 0.5s ease-out;
+  }
+
+  .fade-in {
+    animation: fadeIn 0.6s ease-out;
+  }
+
+  .bounce-in {
+    animation: bounceIn 0.8s ease-out;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+/* アニメーション定義 */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* 統一カラーシステムで、見やすく美しいUIを実現しました */
+
