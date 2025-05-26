@@ -8,12 +8,13 @@ const inter = Inter({
   display: "swap",
 });
 
+export const viewport = "width=device-width, initial-scale=1";
+
 export const metadata: Metadata = {
   title: "SubsBase - サブスクリプション管理プラットフォーム",
   description: "モダンで安全なサブスクリプション管理を簡単に。プロフェッショナルなSaaSテンプレート。",
   keywords: "サブスクリプション, SaaS, Stripe, Next.js, React",
   authors: [{ name: "SubsBase Team" }],
-  viewport: "width=device-width, initial-scale=1",
   themeColor: "#667eea",
 };
 
