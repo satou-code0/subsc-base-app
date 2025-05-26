@@ -99,7 +99,7 @@ body {
   }
 
   .card-pro {
-    @apply relative overflow-hidden text-white;
+    @apply rounded-2xl border-0 transition-all duration-300 hover:scale-[1.02] relative overflow-hidden text-white;
     background: var(--gradient-primary);
     box-shadow: var(--shadow-medium);
   }

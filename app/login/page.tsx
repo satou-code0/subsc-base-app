@@ -20,7 +20,7 @@ function LoginPageContent() {
     if (urlMessage) {
       switch (urlMessage) {
         case 'session_expired':
-          setMessage('⚠️ セッションが期限切れです。再度ログインしてください。')
+          setMessage('セッションが期限切れです。再度ログインしてください。')
           break
         case 'auth_error':
           setMessage('❌ 認証エラーが発生しました。再度ログインしてください。')
